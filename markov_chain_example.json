@@ -1,0 +1,98 @@
+{
+  "A0": [
+    {
+      "target": "A1",
+      "rate": 6
+    },
+    {
+      "target": "D0",
+      "rate": 0.25
+    }
+  ],
+  "A1": [
+    {
+      "target": "A2",
+      "rate": 6
+    },
+    {
+      "target": "A0",
+      "rate": 10
+    },
+    {
+      "target": "D1",
+      "rate": 0.25
+    }
+  ],
+  "A2": [
+    {
+      "target": "A3",
+      "rate": 6
+    },
+    {
+      "target": "A1",
+      "rate": 10
+    },
+    {
+      "target": "D2",
+      "rate": 0.25
+    }
+  ],
+  "A3": [
+    {
+      "target": "A2",
+      "rate": 10
+    },
+    {
+      "target": "D3",
+      "rate": 0.25
+    }
+  ],
+  "D0": [
+    {
+      "target": "D1",
+      "rate": 6
+    },
+    {
+      "target": "A0",
+      "rate": 1
+    }
+  ],
+  "D1": [
+    {
+      "target": "D2",
+      "rate": 6
+    },
+    {
+      "target": "D0",
+      "rate": 4
+    },
+    {
+      "target": "A1",
+      "rate": 1
+    }
+  ],
+  "D2": [
+    {
+      "target": "D3",
+      "rate": 6
+    },
+    {
+      "target": "D1",
+      "rate": 4
+    },
+    {
+      "target": "A2",
+      "rate": 1
+    }
+  ],
+  "D3": [
+    {
+      "target": "D2",
+      "rate": 4
+    },
+    {
+      "target": "A3",
+      "rate": 1
+    }
+  ]
+}
