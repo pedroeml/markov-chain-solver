@@ -5,6 +5,7 @@ from markov_chain import create_transition_matrix, m_i, p_i, pi_i, population_n,
 
 
 def example_1():
+    print('Example 1')
     _lambda = 2
     m = 2
     c = 3
@@ -48,6 +49,7 @@ def example_1():
 
 
 def example_2():
+    print('Example 2')
     a = np.array([[-2.02, 2, 0, 0, 2], [2, -4.02, 4, 0, 0], [0, 2, -6.02, 6, 0], [0, 0, 2, -6.02, 0], [0.02, 0.02, 0.02, 0.02, -2]])
     df = pd.DataFrame(a)
     df = df.swapaxes(1, 0, copy=False)
@@ -73,6 +75,13 @@ def example_2():
 
 
 def example_3():
+    print('Example 3')
+    _lambda = 6
+    m_a = 10
+    m_d = 4
+    c = 1
+    k = 3
+
     markov_chain = load_json_file('markov_chain_example.json')
     transition_matrix = create_transition_matrix(markov_chain)
 
@@ -93,6 +102,38 @@ def example_3():
 
     sum_of_pi_is = sum(pi_is)
     print('sum PIs = %.4f' % sum_of_pi_is)
+
+    combined_m_is = [0] * (k + 1)
+
+    for i in range(k + 1):
+        m_a_i = m_i(i, c, m_a)
+        m_d_i = m_i(i, c, m_d)
+        combined_m_is[i] = m_a_i * m_d_i
+        print('M_%d = %.4f' % (i, combined_m_is[i]))
+
+    combined_p_is = [0] * (k+1)
+
+    for i in range(k+1):
+        p_a_i = probability_vector[i]
+        p_d_i = probability_vector[i+k+1]
+        combined_p_is[i] = p_a_i * p_d_i
+
+    print(combined_p_is)
+
+    population = population_n(k, combined_p_is)
+    print('N = %.4f' % population)
+
+    flow = flow_d(k, combined_p_is, combined_m_is)
+    print('D = %.4f' % flow)
+
+    usage = usage_u(k, c, combined_p_is)
+    print('U = %.4f' % usage)
+
+    waiting_time = waiting_time_w(population, flow)
+    print('W = %.4f' % waiting_time)
+
+    l = loss(_lambda, combined_p_is)
+    print('Loss = %.4f' % l)
 
 
 if __name__ == '__main__':
