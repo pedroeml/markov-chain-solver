@@ -5,7 +5,7 @@ from markov_chain import create_transition_matrix, m_i, p_i, pi_i, population_n,
 
 
 def example_1():
-    print('Example 1')
+    print('\nExample 1\n')
     _lambda = 2
     m = 2
     c = 3
@@ -49,7 +49,7 @@ def example_1():
 
 
 def example_2():
-    print('Example 2')
+    print('\nExample 2\n')
     a = np.array([[-2.02, 2, 0, 0, 2], [2, -4.02, 4, 0, 0], [0, 2, -6.02, 6, 0], [0, 0, 2, -6.02, 0], [0.02, 0.02, 0.02, 0.02, -2]])
     df = pd.DataFrame(a)
     df = df.swapaxes(1, 0, copy=False)
@@ -75,7 +75,7 @@ def example_2():
 
 
 def example_3():
-    print('Example 3')
+    print('\nExample 3\n')
     _lambda = 6
     m_a = 10
     m_d = 4
@@ -117,8 +117,6 @@ def example_3():
         p_a_i = probability_vector[i]
         p_d_i = probability_vector[i+k+1]
         combined_p_is[i] = p_a_i * p_d_i
-
-    print(combined_p_is)
 
     population = population_n(k, combined_p_is)
     print('N = %.4f' % population)
