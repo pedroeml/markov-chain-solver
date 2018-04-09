@@ -33,8 +33,6 @@ def preprocess(markov_chain):
 
         i += 1
 
-    print(data)
-
     return data
 
 

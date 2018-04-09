@@ -40,9 +40,13 @@ def p_i(i, _lambda, c, m, previous_p_i=None, current_m_i=None):
 
 def pi_i(i, _lambda, c, m, sum_p, current_p_i=None):
     if current_p_i is not None:
-        return current_p_i/sum_p
+        return _pi_i(current_p_i, sum_p)
 
-    return p_i(i, _lambda, c, m) / sum_p
+    return _pi_i(p_i(i, _lambda, c, m), sum_p)
+
+
+def _pi_i(current_p_i, sum_p):
+    return current_p_i / sum_p
 
 
 def n_i(i, current_pi_i):
