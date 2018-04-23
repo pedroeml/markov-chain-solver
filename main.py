@@ -4,12 +4,8 @@ from read_file import load_json_file
 from markov_chain import create_transition_matrix, m_i, p_i, pi_i, population_n, flow_d, usage_u, waiting_time_w, loss, create_probability_vector, _pi_i
 
 
-def example_1():
-    print('\nExample 1\n')
-    _lambda = 2
-    m = 2
-    c = 3
-    k = 3
+def solve_queue(_lambda, m, c, k, title):
+    print('\n%s\n' % title)
 
     m_is = [0] * (k + 1)
 
@@ -46,6 +42,10 @@ def example_1():
 
     l = loss(_lambda, pi_is)
     print('Loss = %.4f' % l)
+
+
+def example_1():
+    solve_queue(2, 2, 3, 3, 'Example 1')
 
 
 def example_2():
@@ -138,3 +138,11 @@ if __name__ == '__main__':
     example_1()
     example_2()
     example_3()
+    solve_queue(10, 600, 1, 1, 'FilaEntrada min')
+    solve_queue(6, 66.6666, 1, 1, 'FilaEntrada max')
+    solve_queue(9.8360, 7.5, 1, 10, 'FilaImpressao min')
+    solve_queue(5.5045, 6, 1, 10, 'FilaImpressao max')
+    solve_queue(9.8360, 30, 1, 5, 'FilaCorte min')
+    solve_queue(2.8708, 12, 1, 5, 'FilaCorte max')
+    solve_queue(7.4074, 30, 1, 3, 'FilaMontagem min')
+    solve_queue(2.3166, 15, 1, 3, 'FilaMontagem max')
