@@ -4,6 +4,24 @@ from read_file import load_json_file
 from markov_chain import create_transition_matrix, m_i, p_i, pi_i, population_n, flow_d, usage_u, waiting_time_w, loss, create_probability_vector, _pi_i
 
 
+def indexes(_lambda, c, k, pi_is, m_is):
+    population = population_n(k, pi_is)
+    print('N = %.4f' % population)
+
+    flow = flow_d(k, pi_is, m_is)
+    print('D = %.4f' % flow)
+
+    usage = usage_u(k, c, pi_is)
+    print('U = %.4f' % usage)
+
+    waiting_time = waiting_time_w(population, flow)
+    print('W = %.4f' % waiting_time)
+
+    if _lambda > 0:
+        l = loss(_lambda, pi_is)
+        print('Loss = %.4f' % l)
+
+
 def solve_queue(_lambda, m, c, k, title):
     print('\n%s\n' % title)
 
@@ -28,20 +46,7 @@ def solve_queue(_lambda, m, c, k, title):
         pi_is[i] = pi_i(i, _lambda, c, m, sum_of_p_is, current_p_i=p_is[i])
         print('PI_%d = %.4f' % (i, pi_is[i]))
 
-    population = population_n(k, pi_is)
-    print('N = %.4f' % population)
-
-    flow = flow_d(k, pi_is, m_is)
-    print('D = %.4f' % flow)
-
-    usage = usage_u(k, c, pi_is)
-    print('U = %.4f' % usage)
-
-    waiting_time = waiting_time_w(population, flow)
-    print('W = %.4f' % waiting_time)
-
-    l = loss(_lambda, pi_is)
-    print('Loss = %.4f' % l)
+    indexes(_lambda, c, k, pi_is, m_is)
 
 
 def example_1():
@@ -111,38 +116,56 @@ def example_3():
         combined_m_is[i] = m_a_i * m_d_i
         print('M_%d = %.4f' % (i, combined_m_is[i]))
 
-    combined_p_is = [0] * (k+1)
+    combined_pi_is = [0] * (k+1)
 
     for i in range(k+1):
         p_a_i = probability_vector[i]
         p_d_i = probability_vector[i+k+1]
-        combined_p_is[i] = p_a_i * p_d_i
+        combined_pi_is[i] = p_a_i * p_d_i
 
-    population = population_n(k, combined_p_is)
-    print('N = %.4f' % population)
+    indexes(_lambda, c, k, combined_pi_is, combined_m_is)
 
-    flow = flow_d(k, combined_p_is, combined_m_is)
-    print('D = %.4f' % flow)
 
-    usage = usage_u(k, c, combined_p_is)
-    print('U = %.4f' % usage)
+def packaging_line():
+    probabilities = {
+        'fila_entrada': {
+            'c': 1,
+            'k': 1,
+            'm': 1 / ((0.1 + 0.9) / 2),  # avg: 2 by minute
+            'pi_is': [93.75, 6.25]
+        },
+        'fila_impressao': {
+            'c': 1,
+            'k': 10,
+            'm': 1 / ((8 + 10) / 2),  # avg: 0.1111 by minute
+            'pi_is': [10.13, 45.59, 31.48, 9.11, 2.64, 0.78, 0.20, 0.05, 0.02, 0.01, 0.00]
+        },
+        'fila_corte': {
+            'c': 1,
+            'k': 5,
+            'm': 1 / ((2 + 5) / 2),  # avg: 0.2857 by minute
+            'pi_is': [54.92, 40.24, 4.71, 0.13, 0.00, 0.00]
+        },
+        'fila_montagem': {
+            'c': 1,
+            'k': 3,
+            'm': 1 / ((2 + 4) / 2),  # avg: 0.3333 by minute
+            'pi_is': [67.16, 32.32, 0.51, 0.00]
+        }
+    }
 
-    waiting_time = waiting_time_w(population, flow)
-    print('W = %.4f' % waiting_time)
+    for name, queue in probabilities.items():
+        print(name)
+        m_is = [0] * (queue['k'] + 1)
 
-    l = loss(_lambda, combined_p_is)
-    print('Loss = %.4f' % l)
+        for i in range(queue['k'] + 1):
+            m_is[i] = m_i(i, queue['c'], queue['m'])
+
+        indexes(0, queue['c'], queue['k'], queue['pi_is'], m_is)  # ignore the first param
 
 
 if __name__ == '__main__':
     example_1()
     example_2()
     example_3()
-    solve_queue(10, 600, 1, 1, 'FilaEntrada min')
-    solve_queue(6, 66.6666, 1, 1, 'FilaEntrada max')
-    solve_queue(9.8360, 7.5, 1, 10, 'FilaImpressao min')
-    solve_queue(5.5045, 6, 1, 10, 'FilaImpressao max')
-    solve_queue(9.8360, 30, 1, 5, 'FilaCorte min')
-    solve_queue(2.8708, 12, 1, 5, 'FilaCorte max')
-    solve_queue(7.4074, 30, 1, 3, 'FilaMontagem min')
-    solve_queue(2.3166, 15, 1, 3, 'FilaMontagem max')
+    packaging_line()
